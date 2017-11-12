@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: DashGold
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# DashGold_enable (bool): Set to NO by default. Set this variable to YES if you want to enable DashGold service.
+# DashGold_config (path): Set to /usr/local/etc/DashGold.conf by default.
+# DashGold_user:  The user account DashGold daemon runs as. It uses 'root' user by default.
+# DashGold_group: The group account DashGold daemon runs as. It uses 'wheel' group by default.
+# DashGold_datadir (str): Default to "/var/db/DashGold". Base data directory.
+
+. /etc/rc.subr
+
+name=DashGold
+rcvar=DashGold_enable
+
+: ${DashGold_enable:=NO}
+: ${DashGold_config=/usr/local/etc/DashGold.conf}
+: ${DashGold_datadir=/var/db/DashGold}
+: ${DashGold_user="root"}
+: ${DashGold_group="wheel"}
+
+required_files=${DashGold_config}
+command=/usr/local/bin/DashGoldd
+DashGold_chdir=${DashGold_datadir}
+pidfile="${DashGold_datadir}/DashGoldd.pid"
+stop_cmd=DashGold_stop
+command_args="-conf=${DashGold_config} -datadir=${DashGold_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+DashGold_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${DashGold_datadir}
+	[ $? -eq 0 ] && chown -R ${DashGold_user}:${DashGold_group} ${DashGold_datadir}
+}
+
+DashGold_prestart()
+{
+	if [ ! -d "${DashGold_datadir}/." ]; then
+		DashGold_create_datadir || return 1
+	fi
+}
+
+DashGold_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+DashGold_stop()
+{
+    DashGold_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${DashGold_config} -datadir=${DashGold_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

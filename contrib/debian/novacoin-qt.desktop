@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=DashGold
+Comment=DashGold P2P Cryptocurrency
+Comment[ru]=DashGold, P2P криптовалюта
+Comment[fr]=DashGold, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=DashGold, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/DashGold-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/DashGold80.xpm
+MimeType=x-scheme-handler/DashGold;
+Categories=Office;

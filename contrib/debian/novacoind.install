@@ -1,0 +1,2 @@
+debian/bin/DashGoldd usr/bin
+src/DashGoldd usr/lib/DashGold

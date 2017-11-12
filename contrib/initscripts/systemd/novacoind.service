@@ -1,0 +1,11 @@
+[Unit]
+Description=DashGold daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=DashGold
+ExecStart=/opt/DashGold/DashGoldd
+
+[Install]
+WantedBy=multi-user.target

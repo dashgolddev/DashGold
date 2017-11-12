@@ -1,0 +1,5 @@
+DashGold-qt usr/bin
+share/pixmaps/DashGold32.xpm usr/share/pixmaps
+share/pixmaps/DashGold80.xpm usr/share/pixmaps
+debian/DashGold-qt.desktop usr/share/applications
+debian/DashGold-qt.protocol usr/share/kde4/services/
